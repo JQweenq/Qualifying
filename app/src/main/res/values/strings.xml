@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Qualifying</string>
+    <string name="show_exchanges">Show exchanges</string>
 </resources>
