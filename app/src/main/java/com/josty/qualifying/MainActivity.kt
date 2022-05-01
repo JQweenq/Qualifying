@@ -12,9 +12,9 @@ import io.finnhub.api.infrastructure.ApiClient
 import io.finnhub.api.models.Quote
 import io.finnhub.api.models.StockSymbol
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var apiClient: DefaultApi
     private lateinit var models: List<StockSymbol>
+    val token = "c9aj2eiad3i8qngr305g"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(view)
 
-        ApiClient.apiKey["token"] = "c9aj2eiad3i8qngr305g"
+        ApiClient.apiKey["token"] = token
 
         apiClient = DefaultApi()
         val exchangesDialog = ExchangesDialog(arrayOf("zxc", "asd", "qwe"))
@@ -42,13 +43,27 @@ class MainActivity : AppCompatActivity() {
             exchangesDialog.show(supportFragmentManager, "exchanges")
         }
 
+        val log = HttpLoggingInterceptor()
+        log.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        Thread {
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(log)
+            .build()
+
+        val request = Request.Builder()
+            .url("wss://ws.finnhub.io?token=$token")
+            .build()
+
+        val ws = okHttpClient.newWebSocket(request, WebSocketListener())
+
+
+/*        Thread {
             println("[Exchanges] ${apiClient.forexExchanges()}")
 //                println(apiClient.stockSymbols("US", "", "", "")) // получить символы акций
 
 //                println(apiClient.quote("AAPL")) // получить акцию
-            /*
+            *//*
             * c - текущая цена
             * d - сдача
             * dp - процентное изменение
@@ -56,18 +71,16 @@ class MainActivity : AppCompatActivity() {
             * l - наименьшая цена за сутки
             * o - цена в начале дня
             * pc - предыдущая цена
-            */
-        }.start()
+            *//*
+        }.start()*/
 
         layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         binding.stocks.layoutManager = layoutManager
 
         adapter = StocksAdapter(this)
         binding.stocks.adapter = adapter
-        GlobalScope.launch {
-            models = getStocksAsync()
-            adapter.setModels(models)
-        }
+
+        adapter.setModels(models)
     }
 
     suspend fun getQuoteAsync(stock: String): Quote{
@@ -79,6 +92,23 @@ class MainActivity : AppCompatActivity() {
     suspend fun getStocksAsync(): List<StockSymbol> {
         return withContext(Dispatchers.IO) {
             apiClient.stockSymbols("US", "", "", "")
+        }
+    }
+    private class WebSocketListener: okhttp3.WebSocketListener(){
+
+        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+            super.onClosed(webSocket, code, reason)
+            println("[onClosed] $code")
+        }
+
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            super.onMessage(webSocket, text)
+            println("[onMessage] $text")
+        }
+
+        override fun onOpen(webSocket: WebSocket, response: Response) {
+            super.onOpen(webSocket, response)
+            println("[onOpen]")
         }
     }
 }
