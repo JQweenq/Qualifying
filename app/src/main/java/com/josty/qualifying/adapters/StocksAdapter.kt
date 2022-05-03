@@ -6,19 +6,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.josty.qualifying.MainActivity
+import com.josty.qualifying.mainActivity.MainActivity
 import com.josty.qualifying.R
 import io.finnhub.api.models.StockSymbol
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 
-class StocksAdapter(val ctx: MainActivity): RecyclerView.Adapter<StocksAdapter.ViewHolder>() {
+class StocksAdapter(ctx: MainActivity): RecyclerView.Adapter<StocksAdapter.ViewHolder>() {
 
-    private lateinit var models: List<StockSymbol>
+    private var models: List<StockSymbol> = listOf()
+    private var ws: WebSocket
+    init{
+        val log = HttpLoggingInterceptor()
+        log.setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(log)
+            .build()
+
+        val request = Request.Builder()
+            .url("wss://ws.finnhub.io?token=${ctx.token}")
+            .build()
+
+        ws = okHttpClient.newWebSocket(request, WebSocketListener())
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setModels(m: List<StockSymbol>) {
         this.models = m
+        println("[RecyclerView] new models: $models")
         notifyDataSetChanged()
     }
 
@@ -29,19 +45,41 @@ class StocksAdapter(val ctx: MainActivity): RecyclerView.Adapter<StocksAdapter.V
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        GlobalScope.launch {
-            holder.price.text = models[position].symbol?.let { ctx.getQuoteAsync(it).c.toString() }
-        }
+
+        println("[Recycler] binding: ${models.get(position).symbol}")
+//        println("[Recycler] binding: ${models[position]}")
+
+        holder.price.text = models.get(position).symbol
+
+//        ws.send("{\"type\":\"subscribe\",\"symbol\":\"${models.get(position).symbol}\"}")
 
     }
 
-    override fun getItemCount() = 0
+    override fun getItemCount(): Int = models.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val price: TextView
 
         init {
             price = itemView.findViewById(R.id.price)
+        }
+    }
+
+    class WebSocketListener: okhttp3.WebSocketListener(){
+
+        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+            super.onClosed(webSocket, code, reason)
+            println("[onClosed] $code")
+        }
+
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            super.onMessage(webSocket, text)
+            println("[onMessage] $text")
+        }
+
+        override fun onOpen(webSocket: WebSocket, response: Response) {
+            super.onOpen(webSocket, response)
+            println("[onOpen]")
         }
     }
 }

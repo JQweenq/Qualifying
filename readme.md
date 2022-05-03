@@ -10,3 +10,8 @@ apiClient.stockSymbols("<Код биржи>", "", "", "")
 ```kotlin
 apiClient.quote("<Символ акции>")
 ```
+
+# TODO
+
+- Закинуть в RecyclerView список символов
+- Загружать цены из символов
