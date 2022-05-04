@@ -1,6 +1,7 @@
 package com.josty.qualifying.mainActivity
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,9 @@ import com.josty.qualifying.dialogs.ExchangesDialog
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.infrastructure.ApiClient
 import io.finnhub.api.models.StockSymbol
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     val token = "c9aj2eiad3i8qngr305g"
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,39 +39,34 @@ class MainActivity : AppCompatActivity() {
         ApiClient.apiKey["token"] = token
         apiClient = DefaultApi()
 
-        val exchangesDialog = ExchangesDialog(arrayOf("zxc", "asd", "qwe"))
+
+        val exchangesDialog = ExchangesDialog()
 
         binding.showExchanges.setOnClickListener {
             exchangesDialog.show(supportFragmentManager, "exchanges")
         }
 
-/*        Thread {
-            println("[Exchanges] ${apiClient.forexExchanges()}")
-//                println(apiClient.stockSymbols("US", "", "", "")) // получить символы акций
-
-//                println(apiClient.quote("AAPL")) // получить акцию
-            *//*
+        /* apiClient.stockSymbols("US", "", "", "") // получить символы акций
+        apiClient.quote("AAPL")) // получить акцию
             * c - текущая цена
             * d - сдача
             * dp - процентное изменение
             * h - наибольшая цена за сутки
             * l - наименьшая цена за сутки
             * o - цена в начале дня
-            * pc - предыдущая цена
-            *//*
-        }.start()*/
+            * pc - предыдущая цена */
 
         layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         binding.stocks.layoutManager = layoutManager
 
-        adapter = StocksAdapter(this)
+        adapter = StocksAdapter(this, apiClient)
         binding.stocks.adapter = adapter
 
-
-        Executors.newSingleThreadExecutor().execute {
+        GlobalScope.launch {
             models = apiClient.stockSymbols("US", "", "", "")
             runOnUiThread {
                 adapter.setModels(models)
+                binding.progressBar.visibility = View.GONE
             }
         }
     }

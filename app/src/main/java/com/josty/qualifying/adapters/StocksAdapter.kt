@@ -8,11 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.mainActivity.MainActivity
 import com.josty.qualifying.R
+import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.models.StockSymbol
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
+import java.net.SocketTimeoutException
 
-class StocksAdapter(ctx: MainActivity): RecyclerView.Adapter<StocksAdapter.ViewHolder>() {
+class StocksAdapter(private val ctx: MainActivity, private val client: DefaultApi): RecyclerView.Adapter<StocksAdapter.ViewHolder>() {
 
     private var models: List<StockSymbol> = listOf()
     private var ws: WebSocket
@@ -44,25 +49,32 @@ class StocksAdapter(ctx: MainActivity): RecyclerView.Adapter<StocksAdapter.ViewH
         return ViewHolder(view)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         println("[Recycler] binding: ${models.get(position).symbol}")
-//        println("[Recycler] binding: ${models[position]}")
 
-        holder.price.text = models.get(position).symbol
+        holder.title.text = models[position].displaySymbol
+        GlobalScope.launch {
+            var price = "Error"
+            try {
+                price = "${models[position].currency}: ${client.quote(models[position].symbol.toString()).c}"
+            } catch (ex: SocketTimeoutException){
+            }
+            ctx.runOnUiThread {
+                holder.price.text = price
+            }
 
-//        ws.send("{\"type\":\"subscribe\",\"symbol\":\"${models.get(position).symbol}\"}")
-
+        }
     }
 
     override fun getItemCount(): Int = models.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val price: TextView
+        val title: TextView = itemView.findViewById(R.id.title)
+        val price: TextView = itemView.findViewById(R.id.price)
 
-        init {
-            price = itemView.findViewById(R.id.price)
-        }
     }
 
     class WebSocketListener: okhttp3.WebSocketListener(){
