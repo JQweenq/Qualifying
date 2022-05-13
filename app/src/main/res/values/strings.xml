@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Qualifying</string>
     <string name="show_exchanges">Show exchanges</string>
+    <string name="no_connection">Нет подключения к интернету</string>
+    <string name="needed_connection">Для работы приложения необходим доступ к интернету</string>
+    <string name="ok">Ok</string>
 </resources>

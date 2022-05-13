@@ -1,9 +1,10 @@
-package com.josty.qualifying.dialogs
+package com.josty.qualifying.ui.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import com.josty.qualifying.R
 
 class ExchangesDialog(): DialogFragment() {
     private val exchanges: Array<CharSequence> = arrayOf(

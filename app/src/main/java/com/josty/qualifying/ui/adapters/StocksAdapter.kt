@@ -1,4 +1,4 @@
-package com.josty.qualifying.adapters
+package com.josty.qualifying.ui.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.josty.qualifying.mainActivity.MainActivity
+import com.josty.qualifying.ui.activities.MainActivity
 import com.josty.qualifying.R
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.models.StockSymbol
