@@ -1,6 +1,7 @@
 package com.josty.qualifying.ui.adapters
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.ui.activities.MainActivity
 import com.josty.qualifying.R
 import io.finnhub.api.apis.DefaultApi
+import io.finnhub.api.infrastructure.ClientException
 import io.finnhub.api.models.StockSymbol
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -53,19 +55,19 @@ class StocksAdapter(private val ctx: MainActivity, private val client: DefaultAp
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        println("[Recycler] binding: ${models.get(position).symbol}")
-
         holder.title.text = models[position].displaySymbol
         GlobalScope.launch {
             var price = "Error"
             try {
                 price = "${models[position].currency}: ${client.quote(models[position].symbol.toString()).c}"
             } catch (ex: SocketTimeoutException){
+                Log.e("[Finnhub]", "SocketTimeout")
+            } catch (e: ClientException){
+                Log.e("[Finnhub]", "ClientError: 429")
             }
             ctx.runOnUiThread {
                 holder.price.text = price
             }
-
         }
     }
 

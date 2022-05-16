@@ -14,7 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/window_background</item>
-        <item name="colorOnBackground">@color/violet_700</item>
+        <item name="colorOnBackground">@color/violet_200</item>
         <!-- Dialogs -->
         <item name="alertDialogTheme">@style/Dialog</item>
         <item name="android:alertDialogTheme">@style/Dialog</item>

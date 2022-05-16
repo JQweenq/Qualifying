@@ -2,11 +2,16 @@ package com.josty.qualifying.ui.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.DialogFragment
 import com.josty.qualifying.R
+import com.josty.qualifying.ui.activities.MainActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class ExchangesDialog(): DialogFragment() {
+class ExchangesDialog(val fn: (String, String, String, String) -> Unit, val activity: MainActivity): DialogFragment() {
     private val exchanges: Array<CharSequence> = arrayOf(
         "Фондовая биржа Буэнос-Айреса",
         "Колумбийская фондовая биржа",
@@ -24,7 +29,9 @@ class ExchangesDialog(): DialogFragment() {
 
         builder.setTitle("Выбирите биржу")
         builder.setItems(exchanges) { dialogInterface, i ->
-            println("[Item clicked] $i")
+            GlobalScope.launch {
+                fn("ME", "", "", "")
+            }
         }
 
         val dialog = builder.create()

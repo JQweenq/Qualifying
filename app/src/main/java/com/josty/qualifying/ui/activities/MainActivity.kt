@@ -3,8 +3,10 @@ package com.josty.qualifying.ui.activities
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.databinding.ActivityMainBinding
@@ -13,9 +15,11 @@ import com.josty.qualifying.ui.dialogs.ExchangesDialog
 import com.josty.qualifying.ui.dialogs.NetworkDialog
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.infrastructure.ApiClient
+import io.finnhub.api.infrastructure.ClientException
 import io.finnhub.api.models.StockSymbol
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             NetworkDialog().show(supportFragmentManager, "network")
 
         binding.showExchanges.setOnClickListener {
-            ExchangesDialog().show(supportFragmentManager, "exchanges")
+            ExchangesDialog(::setModels, this).show(supportFragmentManager, "exchanges")
         }
 
         /* apiClient.stockSymbols("US", "", "", "") // получить символы акций
@@ -59,7 +63,8 @@ class MainActivity : AppCompatActivity() {
             * o - цена в начале дня
             * pc - предыдущая цена */
 
-        layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+//        layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        layoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
         binding.stocks.layoutManager = layoutManager
 
         adapter = StocksAdapter(this, apiClient)
@@ -67,7 +72,13 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             if (connection)
-                models = apiClient.stockSymbols("US", "", "", "")
+                try {
+                    models = apiClient.stockSymbols("US", "", "", "")
+                } catch (e: ClientException) {
+                    Log.e("[Finnhub]", "ClientError: 429")
+                    delay(60000)
+                    models = apiClient.stockSymbols("US", "", "", "")
+                }
             else
                 models = listOf()
             runOnUiThread {
@@ -77,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun hasConnection(): Boolean{
+    fun hasConnection(): Boolean {
         val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         if (wifiInfo != null && wifiInfo.isConnected) {
@@ -98,4 +109,16 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
+    fun setModels(exchange: String, mic: String, securityType: String, currency: String) {
+        if (connection) {
+            try {
+                models = apiClient.stockSymbols(exchange, mic, securityType, currency)
+            } catch (e: ClientException) {
+                Log.e("[Finnhub]", "ClientError: 429")
+            }
+            runOnUiThread {
+                adapter.setModels(models)
+            }
+        }
+    }
 }

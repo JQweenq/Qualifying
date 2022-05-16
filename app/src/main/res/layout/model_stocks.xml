@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="12dp"
-    android:minHeight="40dp"
-    android:backgroundTint="?colorOnBackground"
-    app:cardCornerRadius="15dp"
     android:layout_marginHorizontal="24dp"
-    tools:layout_editor_absoluteY="12dp"
-    app:contentPaddingLeft="10dp"
-    app:contentPaddingRight="10dp">
+    android:layout_marginVertical="12dp"
+    android:background="@drawable/card_background"
+    android:minHeight="100dp"
+    tools:layout_editor_absoluteY="12dp">
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:layout_marginEnd="10dp"
-        android:textSize="18sp"
+        android:text="Title"
+        android:textAlignment="center"
         android:textColor="@color/white"
-        android:text="Title" />
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|end"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:text="Price" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
 
-</androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
