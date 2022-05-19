@@ -11,26 +11,42 @@ import com.josty.qualifying.ui.activities.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ExchangesDialog(val fn: (String, String, String, String) -> Unit, val activity: MainActivity): DialogFragment() {
-    private val exchanges: Array<CharSequence> = arrayOf(
-        "Фондовая биржа Буэнос-Айреса",
-        "Колумбийская фондовая биржа",
-        "Канадская национальная фондовая биржа",
-        "Каракасская фондовая биржа",
-        "Мексиканская фондовая биржа",
-        "НЕО биржа",
-        "Фондовая биржа Сан-Паулу",
-        "Фондовая биржа Торонто",
-        "Нью-Йоркская фондовая биржа",
-        "Фондовая биржа Торонто"
+class Exchanges{
+    val exchanges: Array<Exchange> = arrayOf(
+        Exchange("BA", "Фондовая биржа Буэнос-Айреса"),
+        Exchange("BC", "Колумбийская фондовая биржа"),
+        Exchange("CN", "Канадская национальная фондовая биржа"),
+        Exchange("CR", "Каракасская фондовая биржа"),
+        Exchange("MX", "Мексиканская фондовая биржа"),
+        Exchange("NE", "НЕО биржа"),
+        Exchange("SA", "Фондовая биржа Сан-Паулу"),
+        Exchange("SN", "Фондовая биржа Торонто"),
+        Exchange("TO", "Нью-Йоркская фондовая биржа"),
+        Exchange("US", "Канадская фондовая биржа")
     )
+
+    fun getNames(): Array<CharSequence> {
+        var names = emptyArray<CharSequence>()
+        exchanges.forEach { exchange -> names += exchange.name }
+        return names
+    }
+
+    fun get(pos: Int): Exchange = exchanges[pos]
+
+    data class Exchange(val code: String, val name: CharSequence)
+}
+
+
+
+class ExchangesDialog(val fn: (String, String, String, String) -> Unit, val activity: MainActivity): DialogFragment() {
+    private val exchanges = Exchanges()
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
 
         builder.setTitle("Выбирите биржу")
-        builder.setItems(exchanges) { dialogInterface, i ->
+        builder.setItems(exchanges.getNames()) { dialogInterface, i ->
             GlobalScope.launch {
-                fn("ME", "", "", "")
+                fn(exchanges.get(i).code, "", "", "")
             }
         }
 

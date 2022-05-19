@@ -1,14 +1,18 @@
 package com.josty.qualifying.ui.activities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.josty.qualifying.R
 import com.josty.qualifying.databinding.ActivityMainBinding
 import com.josty.qualifying.ui.adapters.StocksAdapter
 import com.josty.qualifying.ui.dialogs.ExchangesDialog
@@ -42,6 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(view)
 
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         // api client for finnhub
         ApiClient.apiKey["token"] = token
         apiClient = DefaultApi()
@@ -49,9 +55,9 @@ class MainActivity : AppCompatActivity() {
         if (!hasConnection())
             NetworkDialog().show(supportFragmentManager, "network")
 
-        binding.showExchanges.setOnClickListener {
+        /*binding.showExchanges.setOnClickListener {
             ExchangesDialog(::setModels, this).show(supportFragmentManager, "exchanges")
-        }
+        }*/
 
         /* apiClient.stockSymbols("US", "", "", "") // получить символы акций
         apiClient.quote("AAPL")) // получить акцию
@@ -118,6 +124,25 @@ class MainActivity : AppCompatActivity() {
             }
             runOnUiThread {
                 adapter.setModels(models)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.action_bar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.show_exchanges -> {
+                ExchangesDialog(::setModels, this).show(supportFragmentManager, "exchanges")
+                super.onOptionsItemSelected(item)
+            }
+            else -> {
+                true
             }
         }
     }

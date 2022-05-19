@@ -7,15 +7,6 @@
     tools:context=".ui.activities.MainActivity"
     android:background="#332973">
 
-    <Button
-        android:id="@+id/show_exchanges"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_exchanges"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stocks"
         android:layout_width="match_parent"
@@ -23,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_exchanges" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
