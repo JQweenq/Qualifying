@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:title="Поиск"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
+
     <item
         android:id="@+id/show_exchanges"
-        android:title="@string/exchanges"
         android:icon="@drawable/more_vert"
+        android:title="@string/exchanges"
         app:showAsAction="always" />
 </menu>

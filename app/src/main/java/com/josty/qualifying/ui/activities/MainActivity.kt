@@ -1,6 +1,7 @@
 package com.josty.qualifying.ui.activities
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -8,17 +9,17 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.R
+import com.josty.qualifying.application.App
 import com.josty.qualifying.databinding.ActivityMainBinding
 import com.josty.qualifying.ui.adapters.StocksAdapter
 import com.josty.qualifying.ui.dialogs.ExchangesDialog
 import com.josty.qualifying.ui.dialogs.NetworkDialog
 import io.finnhub.api.apis.DefaultApi
-import io.finnhub.api.infrastructure.ApiClient
 import io.finnhub.api.infrastructure.ClientException
 import io.finnhub.api.models.StockSymbol
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -26,18 +27,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+@DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: StocksAdapter
-    private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var apiClient: DefaultApi
+    private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var models: List<StockSymbol>
+    private val apiClient: DefaultApi = App::apiClient.invoke(App())
     private var connection = false
 
-    val token = "c9aj2eiad3i8qngr305g"
 
-    @OptIn(DelicateCoroutinesApi::class)
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,28 +48,13 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // api client for finnhub
-        ApiClient.apiKey["token"] = token
-        apiClient = DefaultApi()
-
         if (!hasConnection())
             NetworkDialog().show(supportFragmentManager, "network")
 
-        /*binding.showExchanges.setOnClickListener {
-            ExchangesDialog(::setModels, this).show(supportFragmentManager, "exchanges")
-        }*/
+        binding.refresh.setColorSchemeColors(R.color.red_500)
+        binding.refresh.setOnRefreshListener {
 
-        /* apiClient.stockSymbols("US", "", "", "") // получить символы акций
-        apiClient.quote("AAPL")) // получить акцию
-            * c - текущая цена
-            * d - сдача
-            * dp - процентное изменение
-            * h - наибольшая цена за сутки
-            * l - наименьшая цена за сутки
-            * o - цена в начале дня
-            * pc - предыдущая цена */
-
-//        layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        }
         layoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
         binding.stocks.layoutManager = layoutManager
 
@@ -77,16 +62,16 @@ class MainActivity : AppCompatActivity() {
         binding.stocks.adapter = adapter
 
         GlobalScope.launch {
-            if (connection)
+            models = if (connection)
                 try {
-                    models = apiClient.stockSymbols("US", "", "", "")
+                    apiClient.stockSymbols("US", "", "", "")
                 } catch (e: ClientException) {
                     Log.e("[Finnhub]", "ClientError: 429")
                     delay(60000)
-                    models = apiClient.stockSymbols("US", "", "", "")
+                    apiClient.stockSymbols("US", "", "", "")
                 }
             else
-                models = listOf()
+                listOf()
             runOnUiThread {
                 adapter.setModels(models)
                 binding.progressBar.visibility = View.GONE
@@ -131,6 +116,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.action_bar, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -140,6 +131,10 @@ class MainActivity : AppCompatActivity() {
             R.id.show_exchanges -> {
                 ExchangesDialog(::setModels, this).show(supportFragmentManager, "exchanges")
                 super.onOptionsItemSelected(item)
+            }
+            R.id.search -> {
+
+                true
             }
             else -> {
                 true

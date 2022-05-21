@@ -11,7 +11,7 @@ import com.josty.qualifying.ui.activities.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class Exchanges{
+class Exchanges {
     val exchanges: Array<Exchange> = arrayOf(
         Exchange("BA", "Фондовая биржа Буэнос-Айреса"),
         Exchange("BC", "Колумбийская фондовая биржа"),
@@ -36,9 +36,10 @@ class Exchanges{
     data class Exchange(val code: String, val name: CharSequence)
 }
 
-
-
-class ExchangesDialog(val fn: (String, String, String, String) -> Unit, val activity: MainActivity): DialogFragment() {
+class ExchangesDialog(
+    val fn: (String, String, String, String) -> Unit,
+    val activity: MainActivity
+) : DialogFragment() {
     private val exchanges = Exchanges()
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)

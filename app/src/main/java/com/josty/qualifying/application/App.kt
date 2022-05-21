@@ -1,86 +1,15 @@
 package com.josty.qualifying.application
 
 import android.app.Application
+import io.finnhub.api.apis.DefaultApi
+import io.finnhub.api.infrastructure.ApiClient
 
-class App: Application() {
-    lateinit var Exchanges: Map<String, String>
+class App : Application() {
+    val token = "c9aj2eiad3i8qngr305g"
+    var apiClient: DefaultApi
 
-    override fun onCreate() {
-        super.onCreate()
-
-        Exchanges = mapOf(
-            "NYSE EURONEXT - EURONEXT AMSTERDAM" to "AS",
-            "ATHENS EXCHANGE S.A. CASH MARKET" to "AT",
-            "ASX - ALL MARKETS" to "AX",
-            "BOLSA DE COMERCIO DE BUENOS AIRES" to "BA",
-            "BOLSA DE VALORES DE COLOMBIA" to "BC",
-            "BUDAPEST STOCK EXCHANGE" to "BD",
-            "BOERSE BERLIN" to "BE",
-            "STOCK EXCHANGE OF THAILAND" to "BK",
-            "BSE LTD" to "BO",
-            "NYSE EURONEXT - EURONEXT BRUSSELS" to "BR",
-            "Egyptian Stock Exchange" to "CA",
-            "CANADIAN NATIONAL STOCK EXCHANGE" to "CN",
-            "OMX NORDIC EXCHANGE COPENHAGEN A/S" to "CO",
-            "CARACAS STOCK EXCHANGE" to "CR",
-            "DUBAI FINANCIAL MARKET" to "DB",
-            "XETRA" to "DE",
-            "BOERSE DUESSELDORF" to "DU",
-            "DEUTSCHE BOERSE AG" to "F",
-            "NASDAQ OMX HELSINKI LTD" to "HE",
-            "HONG KONG EXCHANGES AND CLEARING LTD" to "HK",
-            "HANSEATISCHE WERTPAPIERBOERSE HAMBURG" to "HM",
-            "NASDAQ OMX ICELAND" to "IC",
-            "IRISH STOCK EXCHANGE - ALL MARKET" to "IR",
-            "BORSA ISTANBUL" to "IS",
-            "INDONESIA STOCK EXCHANGE" to "JK",
-            "JOHANNESBURG STOCK EXCHANGE" to "JO",
-            "BURSA MALAYSIA" to "KL",
-            "KOREA EXCHANGE (KOSDAQ)" to "KQ",
-            "KOREA EXCHANGE (STOCK MARKET)" to "KS",
-            "LONDON STOCK EXCHANGE" to "L",
-            "Euronext London" to "LN",
-            "NYSE EURONEXT - EURONEXT LISBON" to "LS",
-            "BOLSA DE MADRID" to "MC",
-            "MOSCOW EXCHANGE" to "ME",
-            "Italian Stock Exchange" to "MI",
-            "BOERSE MUENCHEN" to "MU",
-            "BOLSA MEXICANA DE VALORES (MEXICAN STOCK EXCHANGE)" to "MX",
-            "AEQUITAS NEO EXCHANGE" to "NE",
-            "Nigerian Stock Exchange" to "NL",
-            "NATIONAL STOCK EXCHANGE OF INDIA" to "NS",
-            "NEW ZEALAND EXCHANGE LTD" to "NZ",
-            "OSLO BORS ASA" to "OL",
-            "NYSE EURONEXT - MARCHE LIBRE PARIS" to "PA",
-            "Philippine Stock Exchange" to "PM",
-            "PRAGUE STOCK EXCHANGE" to "PR",
-            "QATAR EXCHANGE" to "QA",
-            "NASDAQ OMX RIGA" to "RG",
-            "Brazil Bolsa - Sao Paolo" to "SA",
-            "BOERSE STUTTGART" to "SG",
-            "SINGAPORE EXCHANGE" to "SI",
-            "SANTIAGO STOCK EXCHANGE" to "SN",
-            "SAUDI STOCK EXCHANGE" to "SR",
-            "SHANGHAI STOCK EXCHANGE" to "SS",
-            "NASDAQ OMX NORDIC STOCKHOLM" to "ST",
-            "SWISS EXCHANGE" to "SW",
-            "SHENZHEN STOCK EXCHANGE" to "SZ",
-            "TOKYO STOCK EXCHANGE-TOKYO PRO MARKET" to "T",
-            "TEL AVIV STOCK EXCHANGE" to "TA",
-            "NASDAQ OMX TALLINN" to "TL",
-            "TORONTO STOCK EXCHANGE" to "TO",
-            "TAIWAN STOCK EXCHANGE" to "TW",
-            "TPEx" to "TWO",
-            "US exchanges (NYSE, Nasdaq)" to "US",
-            "TSX VENTURE EXCHANGE - NEX" to "V",
-            "Vienna Stock Exchange" to "VI",
-            "Vietnam exchanges including HOSE HNX and UPCOM" to "VN",
-            "NASDAQ OMX VILNIUS" to "VS",
-            "WARSAW STOCK EXCHANGE/EQUITIES/MAIN MARKET" to "WA",
-            "Hanover Stock Exchange" to "HA",
-            "DEUTSCHE BOERSE Stoxx" to "SX",
-            "DEUTSCHE BOERSE TradeGate" to "TG",
-            "BOERSE_FRANKFURT_ZERTIFIKATE" to "SC",
-        )
+    init{
+        ApiClient.apiKey["token"] = token
+        apiClient = DefaultApi()
     }
 }
