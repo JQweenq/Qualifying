@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activities.SearchActivity"
-            android:exported="false">
+            android:exported="false"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -36,6 +37,10 @@
                 android:name="android.app.default_searchable"
                 android:value=".ui.activities.SearchActivity" />
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

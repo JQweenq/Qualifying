@@ -21,7 +21,8 @@ class WebSocketAdapter(private val ctx: Activity, private val client: DefaultApi
     RecyclerView.Adapter<WebSocketAdapter.ViewHolder>() {
 
     private var models: List<StockSymbol> = listOf()
-//        private var ws: WebSocket
+
+    //        private var ws: WebSocket
     private lateinit var job: Job
 
     /*init {

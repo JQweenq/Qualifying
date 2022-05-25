@@ -3,9 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/background.xml" value="0.1805" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/card_background.xml" value="0.1805" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/ic_close.xml" value="0.1805" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/ic_read.xml" value="0.1805" />
         <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/more_vert.xml" value="0.2115" />
         <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/search.xml" value="0.2115" />
-        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/drawable/toolbar_background.xml" value="0.2105" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/font/inter.xml" value="0.23076923076923078" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/font/inter_bold.xml" value="0.23076923076923078" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/font/inter_extrabold.xml" value="0.23076923076923078" />
+        <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/layout/activity_search.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/layout/model_search.xml" value="0.203125" />
         <entry key="..\:/Users/locadm/AndroidStudioProjects/Qualifying/app/src/main/res/layout/model_stocks.xml" value="0.20416666666666666" />

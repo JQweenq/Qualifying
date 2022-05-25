@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.SearchView" parent="@style/Widget.AppCompat.SearchView">
+        <item name="iconifiedByDefault">false</item>
+        <item name="searchIcon">@null</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="hintTextAppearance">?textAppearanceBodyMedium</item>
+        <item name="queryBackground">@null</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

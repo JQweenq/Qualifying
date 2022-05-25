@@ -13,6 +13,7 @@ import com.josty.qualifying.R
 import com.josty.qualifying.application.App
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.infrastructure.ClientException
+import io.finnhub.api.infrastructure.ServerException
 import io.finnhub.api.models.StockSymbol
 import io.finnhub.api.models.SymbolLookupInfo
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -24,32 +25,16 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.net.SocketTimeoutException
 import kotlin.reflect.KMutableProperty1
 
+@DelicateCoroutinesApi
 class StocksAdapter(private val ctx: Activity, private val client: DefaultApi) :
     RecyclerView.Adapter<StocksAdapter.ViewHolder>() {
 
     private var models: List<StockSymbol> = listOf()
-//    private var ws: WebSocket
     private lateinit var job: Job
-
-    /*init {
-        val log = HttpLoggingInterceptor()
-        log.setLevel(HttpLoggingInterceptor.Level.BODY)
-
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(log)
-            .build()
-
-        val request = Request.Builder()
-            .url("wss://ws.finnhub.io?token=${ctx.token}")
-            .build()
-
-        ws = okHttpClient.newWebSocket(request, WebSocketListener())
-    }*/
 
     @SuppressLint("NotifyDataSetChanged")
     fun setModels(m: List<StockSymbol>) {
         this.models = m
-        println("[RecyclerView] new models: $models")
         notifyDataSetChanged()
     }
 
@@ -59,15 +44,8 @@ class StocksAdapter(private val ctx: Activity, private val client: DefaultApi) :
         return ViewHolder(view)
     }
 
-    override fun onViewDetachedFromWindow(holder: ViewHolder) {
-        println("job canceled")
-        job.cancel()
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.title.text = models[position].displaySymbol
         job = GlobalScope.launch {
             var price = "Error"
@@ -78,37 +56,20 @@ class StocksAdapter(private val ctx: Activity, private val client: DefaultApi) :
                 Log.e("[Finnhub]", "SocketTimeout")
             } catch (e: ClientException) {
                 Log.e("[Finnhub]", "ClientError: 429")
+            } catch (e: ServerException) {
+                Log.e("[Finnhub]", "Server error: 503")
             }
             ctx.runOnUiThread {
                 holder.price.text = price
             }
         }
-        println("job started")
     }
 
     override fun getItemCount(): Int = models.size
+    override fun onViewDetachedFromWindow(holder: ViewHolder) = job.cancel()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.title)
         val price: TextView = itemView.findViewById(R.id.price)
-
-    }
-
-    class WebSocketListener : okhttp3.WebSocketListener() {
-
-        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-            super.onClosed(webSocket, code, reason)
-            println("[onClosed] $code")
-        }
-
-        override fun onMessage(webSocket: WebSocket, text: String) {
-            super.onMessage(webSocket, text)
-            println("[onMessage] $text")
-        }
-
-        override fun onOpen(webSocket: WebSocket, response: Response) {
-            super.onOpen(webSocket, response)
-            println("[onOpen]")
-        }
     }
 }

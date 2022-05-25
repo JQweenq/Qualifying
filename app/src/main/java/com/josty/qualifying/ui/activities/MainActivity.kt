@@ -13,6 +13,7 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.josty.qualifying.R
 import com.josty.qualifying.application.App
 import com.josty.qualifying.databinding.ActivityMainBinding
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var models: List<StockSymbol>
     private val apiClient: DefaultApi = App::apiClient.invoke(App())
     private var connection = false
+    val appBar: AppBarLayout
+        get() = binding.appbar
 
 
     @SuppressLint("ResourceAsColor")
@@ -46,15 +49,17 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(view)
 
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        appBar.setExpanded(true)
+        /*setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)*/
 
         if (!hasConnection())
             NetworkDialog().show(supportFragmentManager, "network")
 
-        binding.refresh.setColorSchemeColors(R.color.red_500)
+        /*binding.refresh.setColorSchemeColors(R.color.red_500)
         binding.refresh.setOnRefreshListener {
 
-        }
+        }*/
         layoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
         binding.stocks.layoutManager = layoutManager
 
@@ -133,7 +138,6 @@ class MainActivity : AppCompatActivity() {
                 super.onOptionsItemSelected(item)
             }
             R.id.search -> {
-
                 true
             }
             else -> {
