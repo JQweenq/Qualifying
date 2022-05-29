@@ -11,7 +11,6 @@
     <color name="red_500">#FFEF3A01</color>
     <color name="violet_200">#FF29215C</color>
     <color name="violet_500">#FF332973</color>
-    <color name="violet_700">#FF4736BA</color>
+    <color name="violet_700">#FF5C548F</color>
     <color name="grey">#FFA8A8A8</color>
-    <color name="color_on_background">#FF5C548F</color>
 </resources>

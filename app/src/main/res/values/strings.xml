@@ -6,4 +6,5 @@
     <string name="ok">Ok</string>
     <string name="exchanges">Exchanges</string>
     <string name="enter_request">Exchanges</string>
+    <string name="enter_stock_title">Введите название акции</string>
 </resources>

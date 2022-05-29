@@ -22,12 +22,12 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_scrollFlags="scroll|enterAlways">-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/stocks"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/stocks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_scrollFlags="scroll|enterAlways" />
 
     <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
@@ -58,13 +58,14 @@
                 app:contentInsetStartWithNavigation="0dp">
 
                 <com.josty.qualifying.widget.SearchEditText
+                    android:id="@+id/search"
                     style="@style/Widget.SearchView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="18dp"
                     android:background="@null"
                     android:gravity="center_vertical"
-                    android:hint="Введите название акции"
+                    android:hint="@string/enter_stock_title"
                     android:imeOptions="actionSearch"
                     android:importantForAutofill="no"
                     android:singleLine="true" />
