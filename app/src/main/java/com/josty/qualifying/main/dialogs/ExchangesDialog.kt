@@ -1,13 +1,10 @@
-package com.josty.qualifying.ui.dialogs
+package com.josty.qualifying.main.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.DialogFragment
-import com.josty.qualifying.R
-import com.josty.qualifying.ui.activities.MainActivity
+import com.josty.qualifying.main.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

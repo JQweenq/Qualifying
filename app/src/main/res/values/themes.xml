@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/violet_500</item>
         <!-- Customize your theme here. -->
+        <item name="tabStyle">@style/Tabs</item>
         <!-- <item name="windowNoTitle">true</item>-->
         <item name="android:navigationBarColor">@color/violet_500</item>
         <item name="actionBarTheme">@style/ActionBar</item>
@@ -42,5 +43,16 @@
         <item name="android:textSize">18sp</item>
         <!--        <item name="android:layout_marginEnd">8dp</item>-->
         <item name="rippleColor">@color/grey</item>
+    </style>
+
+    <style name="Tabs" parent="@style/Widget.Material3.TabLayout">
+        <item name="tabGravity">center</item>
+        <item name="tabInlineLabel">true</item>
+        <item name="tabMinWidth">75dp</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabRippleColor">@color/red_500</item>
+        <item name="tabSelectedTextColor">@color/red_500</item>
+        <item name="tabTextColor">@color/grey</item>
+        <item name="android:background">@null</item>
     </style>
 </resources>

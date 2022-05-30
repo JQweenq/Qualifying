@@ -7,4 +7,7 @@
     <string name="exchanges">Exchanges</string>
     <string name="enter_request">Exchanges</string>
     <string name="enter_stock_title">Введите название акции</string>
+    <string name="search">Поиск</string>
+    <string name="main">Главная</string>
+    <string name="real_time">Реал-Тайм</string>
 </resources>

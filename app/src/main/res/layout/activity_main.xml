@@ -6,30 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/violet_500"
-    tools:context=".ui.activities.MainActivity">
+    tools:context=".main.MainActivity">
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center" />-->
 
-    <!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresh"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:layout_scrollFlags="scroll|enterAlways">-->
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/stocks"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:layout_scrollFlags="scroll|enterAlways" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/appbar"
+            app:layout_anchorGravity="bottom"
+            app:tabMode="scrollable" />
 
-    <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

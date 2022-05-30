@@ -5,11 +5,14 @@ import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.infrastructure.ApiClient
 
 class App : Application() {
-    val token = "c9aj2eiad3i8qngr305g"
+    companion object{
+        const val TOKEN = "c9aj2eiad3i8qngr305g"
+    }
+
     var apiClient: DefaultApi
 
     init{
-        ApiClient.apiKey["token"] = token
+        ApiClient.apiKey["token"] = TOKEN
         apiClient = DefaultApi()
     }
 }

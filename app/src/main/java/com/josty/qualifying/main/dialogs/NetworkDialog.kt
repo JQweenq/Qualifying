@@ -1,4 +1,4 @@
-package com.josty.qualifying.ui.dialogs
+package com.josty.qualifying.main.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
