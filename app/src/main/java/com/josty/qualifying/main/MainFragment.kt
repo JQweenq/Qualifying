@@ -50,22 +50,27 @@ class MainFragment : Fragment() {
         adapter = MainAdapter(requireActivity(), apiClient)
         binding.recycler.adapter = adapter
 
-        GlobalScope.launch {
-            list = try {
-                apiClient.stockSymbols("US", "", "", "")
-            } catch (e: ClientException) {
-                Log.e("[Finnhub]", "ClientError: 429")
-                delay(60000)
-                apiClient.stockSymbols("US", "", "", "")
-            } catch (e: ServerException) {
-                Log.e("[Finnhub]", "Server error: 502")
-                delay(60000)
-                apiClient.stockSymbols("US", "", "", "")
+        if(App.hasConnection(requireContext()))
+            GlobalScope.launch {
+                list = try {
+                    apiClient.stockSymbols("US", "", "", "")
+                } catch (e: ClientException) {
+                    Log.e("[Finnhub]", "ClientError: 429")
+                    delay(60000)
+                    apiClient.stockSymbols("US", "", "", "")
+                } catch (e: ServerException) {
+                    Log.e("[Finnhub]", "Server error: 502")
+                    delay(60000)
+                    apiClient.stockSymbols("US", "", "", "")
+                }
+                requireActivity().runOnUiThread {
+                    adapter.setModels(list)
+                    binding.progress.visibility = View.GONE
+                }
             }
-            requireActivity().runOnUiThread {
-                adapter.setModels(list)
-                binding.progress.visibility = View.GONE
-            }
+        else {
+            adapter.setModels(list)
+            binding.progress.visibility = View.GONE
         }
 
         tracker = SelectionTracker.Builder(

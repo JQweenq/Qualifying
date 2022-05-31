@@ -1,6 +1,7 @@
 package com.josty.qualifying.main.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.R
+import com.josty.qualifying.stock.StockActivity
 import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.models.StockSymbol
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -50,6 +52,12 @@ class MainAdapter(ctx: FragmentActivity) :
         holder.title.text = "SYM: ${symbol?.displaySymbol}"
         holder.description.text = symbol?.description
         holder.mic.text = "MIC: ${symbol?.mic}"
+        holder.itemView.setOnClickListener {
+            val int = Intent(ctx, StockActivity::class.java)
+            int.putExtra("SYMBOL", list?.get(position)!!.symbol)
+            int.putExtra("MIC", list?.get(position)!!.mic)
+            ctx.startActivity(int)
+        }
         tracker.let {
             holder.setActivated(it.isSelected(position.toLong()))
         }

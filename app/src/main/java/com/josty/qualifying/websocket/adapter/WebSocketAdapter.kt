@@ -24,11 +24,11 @@ class WebSocketAdapter : RecyclerView.Adapter<WebSocketAdapter.ViewHolder>() {
 
     private var list: List<StockSymbol>? = null
 
-    private var ws: WebSocket
+//    private var ws: WebSocket
     private lateinit var job: Job
 
     init {
-        val log = HttpLoggingInterceptor()
+        /*val log = HttpLoggingInterceptor()
         log.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val okHttpClient = OkHttpClient.Builder()
@@ -39,7 +39,7 @@ class WebSocketAdapter : RecyclerView.Adapter<WebSocketAdapter.ViewHolder>() {
             .url("wss://ws.finnhub.io?token=${App.TOKEN}")
             .build()
 
-        ws = okHttpClient.newWebSocket(request, WebSocketListener())
+        ws = okHttpClient.newWebSocket(request, WebSocketListener())*/
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -49,7 +49,7 @@ class WebSocketAdapter : RecyclerView.Adapter<WebSocketAdapter.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_main, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)
 
         return ViewHolder(view)
     }
@@ -63,9 +63,9 @@ class WebSocketAdapter : RecyclerView.Adapter<WebSocketAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text = list?.get(position)!!.displaySymbol
 
-        job = GlobalScope.launch {
+        /*job = GlobalScope.launch {
             ws.send("{\"type\":\"subscribe\",\"symbol\":\"${list?.get(position)!!.symbol}\"}")
-        }
+        }*/
     }
 
     override fun getItemCount(): Int = if (list.isNullOrEmpty()) 0 else list!!.size

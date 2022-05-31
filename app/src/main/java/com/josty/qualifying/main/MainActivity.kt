@@ -1,14 +1,8 @@
 package com.josty.qualifying.main
 
 import android.annotation.SuppressLint
-import android.app.SearchManager
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -21,7 +15,6 @@ import com.josty.qualifying.databinding.ActivityMainBinding
 import com.josty.qualifying.main.dialogs.NetworkDialog
 import com.josty.qualifying.search.SearchFragment
 import com.josty.qualifying.websocket.WebSocketFragment
-import io.finnhub.api.apis.DefaultApi
 import io.finnhub.api.models.StockSymbol
 import kotlinx.coroutines.DelicateCoroutinesApi
 
@@ -29,14 +22,12 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var searchFragment: SearchFragment? = null
-    private var connection = false
     private val appBar: AppBarLayout get() = binding.appbar
     private val pagerAdapter: FragmentStateAdapter = ViewPagerAdapter(this)
 
-    companion object{
+    companion object {
         var selectedList: List<StockSymbol>? = null
     }
-
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             )
         }.attach()
 
-        if (!hasConnection())
+        if (!App.hasConnection(this))
             NetworkDialog().show(supportFragmentManager, "network")
 
         binding.search.setOnFocusChangeListener { _, bool ->
@@ -82,27 +73,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun hasConnection(): Boolean {
-        val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        var wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-        if (wifiInfo != null && wifiInfo.isConnected) {
-            this.connection = true
-            return true
-        }
-        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-        if (wifiInfo != null && wifiInfo.isConnected) {
-            this.connection = true
-            return true
-        }
-        wifiInfo = cm.activeNetworkInfo
-        if (wifiInfo != null && wifiInfo.isConnected) {
-            this.connection = true
-            return true
-        }
-        this.connection = false
-        return false
-    }
-
     /*fun setModels(exchange: String, mic: String, securityType: String, currency: String) {
         if (connection) {
             try {
@@ -115,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }*/
-
+/*
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.action_bar, menu)
@@ -142,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
-    }
+    }*/
 
     private inner class ViewPagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = 3

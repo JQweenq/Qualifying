@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.application.App
 import com.josty.qualifying.databinding.FragmentSearchBinding
 import com.josty.qualifying.main.MainActivity
+import com.josty.qualifying.main.dialogs.NetworkDialog
 import com.josty.qualifying.search.adapter.SearchAdapter
 import com.josty.qualifying.search.adapter.SearchItemDetailsLookup
 import io.finnhub.api.apis.DefaultApi
@@ -39,13 +40,13 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater)
 
         layoutManager = GridLayoutManager(activity, 2, RecyclerView.VERTICAL, false)
         binding.recycler.layoutManager = layoutManager
 
-        adapter = SearchAdapter()
+        adapter = SearchAdapter(requireActivity())
         binding.recycler.adapter = adapter
 
         tracker = SelectionTracker.Builder(
@@ -81,11 +82,14 @@ class SearchFragment : Fragment() {
     }
 
     fun search(query: String) {
-        GlobalScope.launch {
-            list = apiClient.symbolSearch(query).result!!
-            requireActivity().runOnUiThread {
-                adapter.setModels(list)
+        if (App.hasConnection(requireContext()))
+            GlobalScope.launch {
+                list = apiClient.symbolSearch(query).result!!
+                requireActivity().runOnUiThread {
+                    adapter.setModels(list)
+                }
             }
-        }
+        else
+            NetworkDialog().show(childFragmentManager, "network")
     }
 }

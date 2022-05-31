@@ -1,21 +1,24 @@
 package com.josty.qualifying.search.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.josty.qualifying.R
+import com.josty.qualifying.stock.StockActivity
 import io.finnhub.api.models.SymbolLookupInfo
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Job
 
 @DelicateCoroutinesApi
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
-
+class SearchAdapter(private val ctx: FragmentActivity) :
+    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
     private var list: List<SymbolLookupInfo>? = null
     private var job: Job? = null
     lateinit var tracker: SelectionTracker<Long>
@@ -40,6 +43,12 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
         holder.title.text = symbol?.displaySymbol
         holder.description.text = symbol?.description
+        holder.itemView.setOnClickListener {
+            val int = Intent(ctx, StockActivity::class.java)
+            int.putExtra("SYMBOL", list?.get(position)!!.symbol)
+            int.putExtra("DESCRIPTION", list?.get(position)!!.description)
+            ctx.startActivity(int)
+        }
         tracker.let {
             holder.setActivated(it.isSelected(position.toLong()))
         }

@@ -10,4 +10,5 @@
     <string name="search">Поиск</string>
     <string name="main">Главная</string>
     <string name="real_time">Реал-Тайм</string>
+    <string name="price">Цена</string>
 </resources>
